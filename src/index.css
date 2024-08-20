@@ -1,0 +1,153 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+html {
+  padding-right: 0 !important;
+  overflow: visible !important;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  scrollbar-width: 0;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+  font: inherit; /* Inherit font styles */
+  cursor: pointer; /* Pointer cursor */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+.combobox-options:empty {
+  display: none;
+}
+
+.sprite {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.sprite-animate {
+  animation: spriteAnimation 2s ease 0s 1 normal forwards;
+}
+
+.sprite-img{
+  width: 96px;
+}
+
+.pokemon-name{
+  transition: color 0.2s ease;
+}
+.pokemon-name:hover{
+  color: #3639fffa;
+}
+
+.description{
+  width: min-content;
+}
+
+@keyframes spriteAnimation {
+  0% {
+    transform: translate(0);
+  }
+
+  10% {
+    transform: translate(-2px, -2px);
+  }
+
+  20% {
+    transform: translate(2px, -2px);
+  }
+
+  30% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(2px, 2px);
+  }
+
+  50% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, -2px);
+  }
+
+  70% {
+    transform: translate(-2px, 2px);
+  }
+
+  80% {
+    transform: translate(-2px, -2px);
+  }
+
+  90% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .sprite:hover {
+    transform: scale(1.2) translateZ(0);
+    background: radial-gradient(rgb(101, 101, 101) 20%, transparent 40%);
+  }
+
+
+
+  .pokemon-container {
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out; 
+  }
+
+  .pokemon-container:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175); 
+  }
+}
