@@ -1,5 +1,3 @@
-
-
 #root {
   width: 100%;
   height: 100%;
@@ -36,13 +34,11 @@
   }
 }
 
-
 @media (max-width: 575.98px) {
   #root {
-    max-width: 100%; 
+    max-width: 100%;
   }
 }
-
 
 @media (min-width: 576px) and (max-width: 767.98px) {
   #root {
@@ -62,7 +58,6 @@
   }
 }
 
-
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   #root {
     max-width: 1140px;
@@ -81,4 +76,232 @@
 
 .read-the-docs {
   color: #888;
+}
+
+button {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+  font: inherit; /* Inherit font styles */
+  cursor: pointer; /* Pointer cursor */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+.combobox-options:empty {
+  display: none;
+}
+
+.sprite {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.sprite-animate {
+  animation: spriteAnimation 2s ease 0s 1 normal forwards;
+}
+
+.sprite-img {
+  width: 96px;
+}
+
+.pokemon-name {
+  transition: color 0.2s ease;
+}
+.pokemon-name:hover {
+  color: #3639fffa;
+}
+
+.description {
+  width: min-content;
+}
+
+.t-type {
+  border-style: solid none;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 0.15em;
+  font-variant: small-caps;
+  font-size: 9pt;
+  color: #f8f8f8;
+  text-shadow: 0 1px 1px #807870;
+}
+
+.type-normal {
+  background-color: #a8a878;
+  border-top-color: #d8d8d0;
+  border-bottom-color: #705848;
+}
+
+.type-fire {
+  background-color: #f08030;
+  border-top-color: #f8d030;
+  border-bottom-color: #c03028;
+}
+
+.type-water {
+  background-color: #6890F0;
+  border-top-color: #98D8D8;
+  border-bottom-color: #807870;
+}
+
+.type-electric {
+  background-color: #F8D030;
+  border-top-color: #F8F878;
+  border-bottom-color: #B8A038;
+}
+
+.type-grass {
+  background-color: #78C850;
+  border-top-color: #C0F860;
+  border-bottom-color: #588040;
+}
+
+.type-ice {
+  background-color: #98D8D8;
+  border-top-color: #D0F8E8;
+  border-bottom-color: #9090A0;
+}
+
+.type-fighting {
+  background-color: #C03028;
+  border-top-color: #F08030;
+  border-bottom-color: #484038;
+}
+
+.type-poison {
+  background-color: #A040A0;
+  border-top-color: #D880B8;
+  border-bottom-color: #483850;
+}
+
+.type-ground {
+  background-color: #E0C068;
+  border-top-color: #F8F878;
+  border-bottom-color: #886830;
+}
+
+.type-flying {
+  background-color: #A890F0;
+  border-top-color: #C8C0F8;
+  border-bottom-color: #705898;
+}
+
+.type-psychic {
+  background-color: #F85888;
+  border-top-color: #F8C0B0;
+  border-bottom-color: #789010;
+}
+
+.type-bug {
+  background-color: #A8B820;
+  border-top-color: #D8E030;
+  border-bottom-color: #A8B820;
+}
+
+.type-rock {
+  background-color: #B8A038;
+  border-top-color: #E0C068;
+  border-bottom-color: #886830;
+}
+
+.type-ghost {
+  background-color: #705898;
+  border-top-color: #A890F0;
+  border-bottom-color: #483850;
+}
+
+.type-dragon {
+  background-color: #7038F8;
+  border-top-color: #B8A0F8;
+  border-bottom-color: #483890;
+}
+
+.type-dark {
+  background-color: #705848;
+  border-top-color: #A8A878;
+  border-bottom-color: #484038;
+}
+
+.type-steel {
+  background-color: #B8B8D0;
+  border-top-color: #D8D8C0;
+  border-bottom-color: #807870;
+}
+
+.type-fairy {
+  background-color: #F0B6BC;
+  border-top-color: #F5CAD1;
+  border-bottom-color: #905F63;
+}
+
+@keyframes spriteAnimation {
+  0% {
+    transform: translate(0);
+  }
+
+  10% {
+    transform: translate(-2px, -2px);
+  }
+
+  20% {
+    transform: translate(2px, -2px);
+  }
+
+  30% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(2px, 2px);
+  }
+
+  50% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, -2px);
+  }
+
+  70% {
+    transform: translate(-2px, 2px);
+  }
+
+  80% {
+    transform: translate(-2px, -2px);
+  }
+
+  90% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .sprite:hover {
+    transform: scale(1.2) translateZ(0);
+    background: radial-gradient(rgb(101, 101, 101) 20%, transparent 40%);
+  }
+
+  .pokemon-container {
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  }
+
+  .pokemon-container:hover {
+    transform: scale(1.1);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  }
 }

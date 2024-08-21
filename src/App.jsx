@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { Suspense, useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
+import getTypeClass from "./getTypeClass";
 import { filterWeight, filterHeight } from "./filterInfo";
 import { fetchData, getSuspender, fetchPokemonDetails } from "./fetchData";
 import "./App.css";
@@ -17,7 +18,7 @@ function App() {
   const [filteredPokemons, setFilteredPokemons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchSpicie, setSearchSpicie] = useState([]);
-  const [speciesDescription, setSpeciesDescription] = useState("");
+  const [speciesCharacteristic, setSpeciesCharacteristic] = useState("");
   const [animatedPokemonId, setAnimatedPokemonId] = useState(null);
 
   useEffect(() => {
@@ -69,6 +70,13 @@ function App() {
     }
   }, [filteredPokemons]);
 
+
+  const formatAbilityName = (text) => {
+    return text
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   const cleanDescription = (text) => {
     return text.replace(/[\f\n\r]/g, " ").trim();
   };
@@ -82,7 +90,7 @@ function App() {
       if (englishEntry) {
         const rawDescription = englishEntry.flavor_text;
         const cleanedDescription = cleanDescription(rawDescription);
-        setSpeciesDescription(cleanedDescription);
+        setSpeciesCharacteristic(cleanedDescription);
       } else {
         console.error("No se encontró una descripción en inglés.");
       }
@@ -92,7 +100,7 @@ function App() {
   const handleImageClick = (id, soundUrl) => {
     playSound(soundUrl);
     setAnimatedPokemonId(id);
-    setTimeout(() => setAnimatedPokemonId(null), 2000); 
+    setTimeout(() => setAnimatedPokemonId(null), 2000);
   };
 
   return (
@@ -126,7 +134,7 @@ function App() {
                   return (
                     <div
                       key={pokemon.id}
-                      className="d-flex justify-content-between bg-dark text-light rounded p-2 w-50"
+                      className="d-flex flex-column flex-lg-row justify-content-between bg-dark text-light rounded p-2 w-50"
                     >
                       <div className="p-4 border border-warning rounded">
                         <h2>{pokemon.name}</h2>
@@ -156,16 +164,44 @@ function App() {
                         <p>
                           Weight: {filteredWeight} {unitWeight}
                         </p>
-                        <p>
-                          Types:{" "}
-                          {pokemon.types
-                            .map((type) => type.type.name)
-                            .join(", ")}
-                        </p>
+                        <div>
+                          <p>Types:</p>
+                          <div
+                            className={`row justify-content-center gap-2 ${
+                              pokemon.types.length > 1
+                                ? "row-cols-3" // Una sola columna ocupa todo el ancho
+                                : "row-cols-2 "
+                            }`}
+                          >
+                            {pokemon.types.map((type) => (
+                              <span
+                                className={`col p-1 t-type ${getTypeClass(
+                                  type.type.name
+                                )}`}
+                                key={type.type.name}
+                              >
+                                {type.type.name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <p>Abilities:</p>
+                          <div className="d-flex flex-column justify-content-center">
+                            {pokemon.abilities.map((ability) => (
+                              <div className="pb-2" key={ability.ability.name}>
+                                <span className="fw-bold">
+                                  {ability.is_hidden ? "Hidden" : "Regular"}:
+                                </span>{" "}
+                                {formatAbilityName(ability.ability.name)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      <div className="description">
-                        <h3 className="">Description</h3>
-                        {speciesDescription}
+                      <div className="description mx-auto mt-5 mt-lg-0">
+                        <h3 className="">Caracteristics</h3>
+                        {speciesCharacteristic}
                       </div>
                     </div>
                   );
