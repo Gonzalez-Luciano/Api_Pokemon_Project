@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { Suspense, useEffect, useState } from "react";
-import SearchBar from "./SearchBar";
+import SearchBar from "./components/SearchBar";
+import PokemonDetail from "./components/PokemonDetails";
 import getTypeClass from "./getTypeClass";
 import { filterWeight, filterHeight } from "./filterInfo";
 import { fetchData, getSuspender, fetchPokemonDetails } from "./fetchData";
@@ -9,15 +10,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // Llamada a la API y uso de Suspense
 const apiData = getSuspender(
-  fetchData("https://pokeapi.co/api/v2/pokemon?limit=25&offset=0")
+  fetchData("https://pokeapi.co/api/v2/pokemon-species?limit=25&offset=0")
 );
 
 function App() {
   const data = apiData.read();
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchSpicie, setSearchSpicie] = useState([]);
+  const [searchPokemonName, setSearchPokemonName] = useState("");
+  const [searchPokemonSpicie, setSearchPokemonSpicie] = useState("");
   const [speciesCharacteristic, setSpeciesCharacteristic] = useState("");
   const [animatedPokemonId, setAnimatedPokemonId] = useState(null);
 
@@ -29,18 +30,27 @@ function App() {
     fetchPokemons();
   }, []);
 
-  const handleSearch = (term) => {
-    setSearchTerm(term.toLowerCase());
+  const handleSearchSpicie = (term) => {
+    setSearchPokemonSpicie(term);
+  };
+
+  const handleSearchName = (term) => {
+    Number.isInteger(term)
+      ? setSearchPokemonName(term)
+      : setSearchPokemonName(term.toLowerCase());
   };
 
   useEffect(() => {
     const fetchSearchedPokemon = async () => {
-      if (searchTerm) {
+      if (searchPokemonName) {
         try {
           const searchPokemon = await fetchPokemonDetails(
-            `https://pokeapi.co/api/v2/pokemon/${searchTerm}`
+            `https://pokeapi.co/api/v2/pokemon/${searchPokemonName}`
           );
-          setFilteredPokemons([searchPokemon]);
+          const searchSpicie = await fetchPokemonDetails(
+            searchPokemon.species.url
+          );
+          setFilteredPokemons([searchSpicie]);
         } catch (error) {
           console.error("Error al obtener al pokemon ", error);
           setFilteredPokemons([]);
@@ -49,7 +59,25 @@ function App() {
     };
 
     fetchSearchedPokemon();
-  }, [searchTerm, pokemons]);
+  }, [searchPokemonName, pokemons]);
+
+  useEffect(() => {
+    const fetchSearchedPokemonSpicie = async () => {
+      if (searchPokemonSpicie) {
+        try {
+          const searchSpicie = await fetchPokemonDetails(
+            `https://pokeapi.co/api/v2/pokemon-species/${searchPokemonSpicie}`
+          );
+          setFilteredPokemons([searchSpicie]);
+        } catch (error) {
+          console.error("Error al obtener al pokemon ", error);
+          setFilteredPokemons([]);
+        }
+      }
+    };
+
+    fetchSearchedPokemonSpicie();
+  }, [searchPokemonSpicie, pokemons]);
 
   const playSound = (soundUrl) => {
     const audio = new Audio(soundUrl);
@@ -58,44 +86,39 @@ function App() {
 
   useEffect(() => {
     if (filteredPokemons.length === 1) {
-      const fetchSearchedSpicie = async (url) => {
+      const fetchSearchedSpicie = () => {
         try {
-          const searchSpeciePokemonFetch = await fetchPokemonDetails(`${url}`);
-          setSearchSpicie([searchSpeciePokemonFetch]);
+          // Fetch the species data
+          const speciesData = filteredPokemons[0];
+
+          // Find the English flavor text entry
+          const englishEntry = speciesData.flavor_text_entries.find(
+            (entry) => entry.language.name === "en"
+          );
+
+          if (englishEntry) {
+            // Clean the raw description text
+            const rawDescription = englishEntry.flavor_text;
+            const cleanedDescription = cleanDescription(rawDescription);
+
+            // Update the species characteristic with the cleaned description
+            setSpeciesCharacteristic(cleanedDescription);
+          } else {
+            console.error("No se encontró una descripción en inglés.");
+          }
         } catch (error) {
           console.error("Error al obtener la descripción", error);
         }
       };
-      fetchSearchedSpicie(filteredPokemons[0].species.url);
+
+      // Call the function with the species URL
+      fetchSearchedSpicie();
     }
   }, [filteredPokemons]);
-
-
-  const formatAbilityName = (text) => {
-    return text
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
 
   const cleanDescription = (text) => {
     return text.replace(/[\f\n\r]/g, " ").trim();
   };
-
-  useEffect(() => {
-    if (searchSpicie.length > 0) {
-      const englishEntry = searchSpicie[0].flavor_text_entries.find(
-        (entry) => entry.language.name === "en"
-      );
-
-      if (englishEntry) {
-        const rawDescription = englishEntry.flavor_text;
-        const cleanedDescription = cleanDescription(rawDescription);
-        setSpeciesCharacteristic(cleanedDescription);
-      } else {
-        console.error("No se encontró una descripción en inglés.");
-      }
-    }
-  }, [searchSpicie]);
 
   const handleImageClick = (id, soundUrl) => {
     playSound(soundUrl);
@@ -111,154 +134,28 @@ function App() {
 
       <Suspense fallback={<div>Loading...</div>}>
         <div className="container">
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearchName} />
           <div
             className={`row justify-content-center gap-3 gap-md-5 ${
               filteredPokemons.length === 1
-                ? "row-cols-1" // Una sola columna ocupa todo el ancho
+                ? "row-cols-1"
                 : "row-cols-1 row-cols-sm-1 row-cols-md-4 row-cols-xl-5"
             }`}
           >
             {filteredPokemons.length > 0 ? (
-              //Se encrontro un solo Pokemon
-              filteredPokemons.length === 1 ? (
-                filteredPokemons.map((pokemon) => {
-                  const soundUrl = `${pokemon.cries.latest}`;
-                  const { filteredWeight, unitWeight } = filterWeight(
-                    pokemon.weight
-                  );
-                  const { filteredHeight, unitHeight } = filterHeight(
-                    pokemon.height
-                  );
-
-                  return (
-                    <div
-                      key={pokemon.id}
-                      className="d-flex flex-column flex-lg-row justify-content-between bg-dark text-light rounded p-2 w-50"
-                    >
-                      <div className="p-4 border border-warning rounded">
-                        <h2>{pokemon.name}</h2>
-                        <div
-                          className={`sprite ${
-                            animatedPokemonId === pokemon.id
-                              ? "sprite-animate"
-                              : ""
-                          }`}
-                          onClick={() => handleImageClick(pokemon.id, soundUrl)}
-                        >
-                          <img
-                            className={
-                              pokemon.sprites.front_default ? "" : "sprite-img"
-                            }
-                            src={
-                              pokemon.sprites.front_default
-                                ? pokemon.sprites.front_default
-                                : "/Pokemon_image_not_found.png"
-                            }
-                            alt={pokemon.name}
-                          />
-                        </div>
-                        <p>
-                          Height: {filteredHeight} {unitHeight}
-                        </p>
-                        <p>
-                          Weight: {filteredWeight} {unitWeight}
-                        </p>
-                        <div>
-                          <p>Types:</p>
-                          <div
-                            className={`row justify-content-center gap-2 ${
-                              pokemon.types.length > 1
-                                ? "row-cols-3" // Una sola columna ocupa todo el ancho
-                                : "row-cols-2 "
-                            }`}
-                          >
-                            {pokemon.types.map((type) => (
-                              <span
-                                className={`col p-1 t-type ${getTypeClass(
-                                  type.type.name
-                                )}`}
-                                key={type.type.name}
-                              >
-                                {type.type.name}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="mt-3">
-                          <p>Abilities:</p>
-                          <div className="d-flex flex-column justify-content-center">
-                            {pokemon.abilities.map((ability) => (
-                              <div className="pb-2" key={ability.ability.name}>
-                                <span className="fw-bold">
-                                  {ability.is_hidden ? "Hidden" : "Regular"}:
-                                </span>{" "}
-                                {formatAbilityName(ability.ability.name)}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="description mx-auto mt-5 mt-lg-0">
-                        <h3 className="">Caracteristics</h3>
-                        {speciesCharacteristic}
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                //Se encontraron mas de un Pokemones
-                filteredPokemons.map((pokemon) => {
-                  const soundUrl = `${pokemon.cries.latest}`;
-                  const { filteredWeight, unitWeight } = filterWeight(
-                    pokemon.weight
-                  );
-                  const { filteredHeight, unitHeight } = filterHeight(
-                    pokemon.height
-                  );
-                  return (
-                    <div
-                      key={pokemon.id}
-                      className="col pokemon-container bg-dark text-light border-bottom border-top border-warning rounded p-2 w-auto"
-                    >
-                      <div>
-                        <button
-                          className="fs-2 fw-semibold pokemon-name"
-                          onClick={() => handleSearch(pokemon.name)}
-                        >
-                          {pokemon.name}
-                        </button>
-                      </div>
-
-                      <div
-                        className={`sprite ${
-                          animatedPokemonId === pokemon.id
-                            ? "sprite-animate"
-                            : ""
-                        }`}
-                        onClick={() => handleImageClick(pokemon.id, soundUrl)}
-                      >
-                        <img
-                          src={pokemon.sprites.front_default}
-                          alt={pokemon.name}
-                        />
-                      </div>
-                      <p>
-                        Height: {filteredHeight} {unitHeight}
-                      </p>
-                      <p>
-                        Weight: {filteredWeight} {unitWeight}
-                      </p>
-                      <p>
-                        Types:{" "}
-                        {pokemon.types.map((type) => type.type.name).join(", ")}
-                      </p>
-                    </div>
-                  );
-                })
-              )
+              filteredPokemons.map((pokemonSpecie) => (
+                <PokemonDetail
+                  key={pokemonSpecie.id}
+                  pokemonSpecie={pokemonSpecie}
+                  animatedPokemonId={animatedPokemonId}
+                  handleImageClick={handleImageClick}
+                  handleSearchName={handleSearchName}
+                  handleSearchSpicie={handleSearchSpicie}
+                  speciesCharacteristic={speciesCharacteristic}
+                  isMultiple={filteredPokemons.length > 1}
+                />
+              ))
             ) : (
-              // No se encontraron Pokemones
               <div className="text-light text-center pb-3">
                 <h4 className="pb-5">Pokémon not found</h4>
                 Go Back to{" "}

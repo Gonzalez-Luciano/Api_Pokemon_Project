@@ -41,10 +41,10 @@ async function fetchPokemonDetails(url) {
   async function fetchData(url) {
     const response = await fetch(url);
     const data = await response.json();
-  
+    
    
-    const detailedPokemonPromises = data.results.map((pokemon) =>
-      fetchPokemonDetails(pokemon.url)
+    const detailedPokemonPromises = data.results.map((pokemon_spiece) =>
+      fetchPokemonDetails(pokemon_spiece.url)
     );
   
 

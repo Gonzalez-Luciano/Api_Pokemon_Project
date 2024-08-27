@@ -1,9 +1,15 @@
+@font-face {
+  font-family: "Pokemon Solid";
+  src: url("/fonts/Pokemon_Solid.ttf") format("truetype");
+}
+
 #root {
   width: 100%;
   height: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: 'Roboto', sans-serif;
 }
 
 .logo {
@@ -86,6 +92,22 @@ button {
   cursor: pointer; /* Pointer cursor */
 }
 
+.pokemon-title {
+  margin: 0;
+  font-family: "Pokemon Solid", sans-serif;
+  margin-top: auto;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+    2px 2px 0 #000;
+}
+
+.sprite img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sprite img:hover {
+  transform: scale(1.1);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -116,6 +138,7 @@ button {
 
 .pokemon-name {
   transition: color 0.2s ease;
+  color: #fff;
 }
 .pokemon-name:hover {
   color: #3639fffa;
@@ -123,6 +146,20 @@ button {
 
 .description {
   width: min-content;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.description button {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.description button:hover {
+  color: #ffee00 !important;
 }
 
 .t-type {
@@ -149,99 +186,164 @@ button {
 }
 
 .type-water {
-  background-color: #6890F0;
-  border-top-color: #98D8D8;
+  background-color: #6890f0;
+  border-top-color: #98d8d8;
   border-bottom-color: #807870;
 }
 
 .type-electric {
-  background-color: #F8D030;
-  border-top-color: #F8F878;
-  border-bottom-color: #B8A038;
+  background-color: #f8d030;
+  border-top-color: #f8f878;
+  border-bottom-color: #b8a038;
 }
 
 .type-grass {
-  background-color: #78C850;
-  border-top-color: #C0F860;
+  background-color: #78c850;
+  border-top-color: #c0f860;
   border-bottom-color: #588040;
 }
 
 .type-ice {
-  background-color: #98D8D8;
-  border-top-color: #D0F8E8;
-  border-bottom-color: #9090A0;
+  background-color: #98d8d8;
+  border-top-color: #d0f8e8;
+  border-bottom-color: #9090a0;
 }
 
 .type-fighting {
-  background-color: #C03028;
-  border-top-color: #F08030;
+  background-color: #c03028;
+  border-top-color: #f08030;
   border-bottom-color: #484038;
 }
 
 .type-poison {
-  background-color: #A040A0;
-  border-top-color: #D880B8;
+  background-color: #a040a0;
+  border-top-color: #d880b8;
   border-bottom-color: #483850;
 }
 
 .type-ground {
-  background-color: #E0C068;
-  border-top-color: #F8F878;
+  background-color: #e0c068;
+  border-top-color: #f8f878;
   border-bottom-color: #886830;
 }
 
 .type-flying {
-  background-color: #A890F0;
-  border-top-color: #C8C0F8;
+  background-color: #a890f0;
+  border-top-color: #c8c0f8;
   border-bottom-color: #705898;
 }
 
 .type-psychic {
-  background-color: #F85888;
-  border-top-color: #F8C0B0;
+  background-color: #f85888;
+  border-top-color: #f8c0b0;
   border-bottom-color: #789010;
 }
 
 .type-bug {
-  background-color: #A8B820;
-  border-top-color: #D8E030;
-  border-bottom-color: #A8B820;
+  background-color: #a8b820;
+  border-top-color: #d8e030;
+  border-bottom-color: #a8b820;
 }
 
 .type-rock {
-  background-color: #B8A038;
-  border-top-color: #E0C068;
+  background-color: #b8a038;
+  border-top-color: #e0c068;
   border-bottom-color: #886830;
 }
 
 .type-ghost {
   background-color: #705898;
-  border-top-color: #A890F0;
+  border-top-color: #a890f0;
   border-bottom-color: #483850;
 }
 
 .type-dragon {
-  background-color: #7038F8;
-  border-top-color: #B8A0F8;
+  background-color: #7038f8;
+  border-top-color: #b8a0f8;
   border-bottom-color: #483890;
 }
 
 .type-dark {
   background-color: #705848;
-  border-top-color: #A8A878;
+  border-top-color: #a8a878;
   border-bottom-color: #484038;
 }
 
 .type-steel {
-  background-color: #B8B8D0;
-  border-top-color: #D8D8C0;
+  background-color: #b8b8d0;
+  border-top-color: #d8d8c0;
   border-bottom-color: #807870;
 }
 
 .type-fairy {
-  background-color: #F0B6BC;
-  border-top-color: #F5CAD1;
-  border-bottom-color: #905F63;
+  background-color: #f0b6bc;
+  border-top-color: #f5cad1;
+  border-bottom-color: #905f63;
+}
+
+.tab-panels {
+  border-radius: 10px;
+}
+
+.tab-list {
+  white-space: nowrap;
+  width: 400px; /* Puedes ajustar el ancho fijo según tus necesidades */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.tab-list button {
+  transition: transform 0.3s ease;
+}
+
+.tab-list .btn-link {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.tab-list button:hover {
+  transform: scale(1.2);
+}
+
+.tab-list .btn-link:hover {
+  background-color: #3d13f7;
+  border-radius: 10px;
+  transform: scale(1.1);
+  color: #fff;
+}
+
+.tab-list .btn-link[aria-selected="true"] {
+  background-color: #137df7; /* Color de fondo cuando está seleccionado */
+  color: #fff; /* Color del texto cuando está seleccionado */
+  font-weight: bold; /* Ejemplo de hacer el texto en negrita */
+  border-radius: 10px; /* Bordes redondeados para el tab seleccionado */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para destacar el tab */
+  transition: all 0.3s ease; /* Transición suave */
+}
+
+.tab-list::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* Chrome/Safari/Webkit */
+}
+
+.scroll-button-left,
+.scroll-button-right {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.scroll-button-left {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.scroll-button-right {
+  position: absolute;
+  right: 0;
+  z-index: 1;
 }
 
 @keyframes spriteAnimation {
@@ -291,6 +393,10 @@ button {
 }
 
 @media (min-width: 768px) {
+  .tab-panels {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
   .sprite:hover {
     transform: scale(1.2) translateZ(0);
     background: radial-gradient(rgb(101, 101, 101) 20%, transparent 40%);
