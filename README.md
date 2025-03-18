@@ -39,6 +39,6 @@ Podes probar la aplicación en el siguiente enlace:
    npm start
    ```
 
-La aplicación se ejecutará en `http://localhost:3000/`.
+La aplicación se ejecutará en `http://localhost:5173/`.
 
 
