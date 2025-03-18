@@ -41,8 +41,4 @@ Podes probar la aplicación en el siguiente enlace:
 
 La aplicación se ejecutará en `http://localhost:3000/`.
 
-## 📄 Licencia
-
-Este proyecto está bajo la licencia MIT. ¡Sos libre de usarlo y mejorarlo! 😊
-
 
